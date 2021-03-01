@@ -1,65 +1,45 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import QRCode from 'qrcode'
+import { useEffect, useState, version } from 'react'
 
-export default function Home() {
+export default function QrCode() {
+  const [version, updateVersion] = useState(3)
+  const [website, updateWebsite] = useState("http://google.com.hk")
+  const [errorCorrectionLevel, updateErrorCorrectionLevel] = useState("L")
+  const [maskPattern, updateMaskPattern] = useState(1)
+
+  console.log(version)
+  console.log(website)
+  console.log(errorCorrectionLevel)
+
+  const generateQR = () => {
+    QRCode.toCanvas(canvas, website, { 
+      version: version, 
+      errorCorrectionLevel: errorCorrectionLevel, 
+      maskPattern: maskPattern, 
+      width: version }, 
+      (err) => {if (err) {console.log(err)}})
+  }
+  useEffect(() => generateQR(), [version, website, errorCorrectionLevel, maskPattern])
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+    <div>
+      <div style={{ display: "grid", gridTemplateColumns: "300px 400px" }}>
+        <label style={{display: "inline-block" }}>Website OR Wordsss</label>
+        <input placeholder="website OR wordsss" onChange={e => updateWebsite(e.target.value)}></input>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "300px 400px" }}>
+        <label>Version (1-40)</label>
+        <input placeholder="version" onChange={e => updateVersion(e.target.value)}></input>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "300px 400px" }}>
+        <label>ErrorCorrectionLevel (L/M/Q/H)</label>
+        <input placeholder="ErrorCorrectionLevel" onChange={e => updateErrorCorrectionLevel(e.target.value)}></input>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "300px 400px" }}>
+        <label>MaskPattern (1-7)</label>
+        <input placeholder="MaskPattern" onChange={e => updateMaskPattern(e.target.value)}></input>
+      </div>
+      <canvas id="canvas"></canvas>
     </div>
   )
 }
