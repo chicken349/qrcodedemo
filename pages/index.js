@@ -7,17 +7,12 @@ export default function QrCode() {
   const [errorCorrectionLevel, updateErrorCorrectionLevel] = useState("L")
   const [maskPattern, updateMaskPattern] = useState(1)
 
-  console.log(version)
-  console.log(website)
-  console.log(errorCorrectionLevel)
-
   const generateQR = () => {
     QRCode.toCanvas(canvas, website, { 
       version: version, 
       errorCorrectionLevel: errorCorrectionLevel, 
-      maskPattern: maskPattern, 
-      width: version }, 
-      (err) => {if (err) {console.log(err)}})
+      maskPattern: maskPattern }, 
+      (err) => {if (err) {console.log("error:",err)}})
   }
   useEffect(() => generateQR(), [version, website, errorCorrectionLevel, maskPattern])
 
